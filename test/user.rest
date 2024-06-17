@@ -1,0 +1,42 @@
+
+### Get list
+GET http://localhost:3000/users
+
+
+
+### create
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "username": "qodar",
+    "email": "nurfian@gmail.com",
+    "firstName": "Nurfian",
+    "password": "secretpassword"
+}
+
+
+### Login
+POST http://localhost:3000/auth
+Content-Type: application/json
+
+{
+    "username": "qodar",
+    "password": "secretpassword"
+}
+
+
+### Logout
+DELETE  http://localhost:3000/auth
+
+
+### get profile
+GET  http://localhost:3000/users/profile/gPi_CnnKlR
+
+
+### get me
+GET  http://localhost:3000/users/me
+
+
+### delete me
+DELETE  http://localhost:3000/users/me
