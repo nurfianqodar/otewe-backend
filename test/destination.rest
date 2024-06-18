@@ -1,0 +1,27 @@
+GET http://localhost:3000/destinations
+
+
+###
+POST  http://localhost:3000/destinations
+Content-Type: application/json
+
+{
+    "name": "Curug 7 Cibolang",
+    "description": "loreakdvvkdm okfsbowfk  okfobkw okfobwk okwokbqok kowkgqeok askdpwkvqpk  dpvkqepkqpek"
+}
+
+
+###
+GET http://localhost:3000/destinations/e94383fe-d5a2-41d6-84a1-e3840cdcf496
+
+
+###
+PATCH http://localhost:3000/destinations/e94383fe-d5a2-41d6-84a1-e3840cdcf496
+Content-Type: application/json
+
+{
+    "name": "Curug 3"
+}
+
+###
+DELETE http://localhost:3000/destinations/e94383fe-d5a2-41d6-84a1-e3840cdcf496

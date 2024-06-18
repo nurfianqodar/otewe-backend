@@ -1,6 +1,7 @@
 import { createFactory } from "hono/factory";
 import {
   createDestinationService,
+  deleteDestinationByIdService,
   getDestinationByIdService,
   getDestinationListService,
   updateDestinationByIdService,
@@ -21,7 +22,10 @@ export const createDestinationHandler = factory.createHandlers(
     const token = getCookie(c, "token")!;
     const { id } = await verify(token, process.env.APP_SECRET!);
     const validatedData = c.req.valid("json");
-    const destination = createDestinationService(id as string, validatedData);
+    const destination = await createDestinationService(
+      id as string,
+      validatedData
+    );
     c.status(201);
     return c.json({
       success: true,
@@ -52,13 +56,14 @@ export const getDestinationByIdHandler = factory.createHandlers(
 );
 
 export const updateDestinationByIdHandler = factory.createHandlers(
+  isAuthorizedOrThrow,
   isDestinationExistOrThrow,
   isOwnerOrThrow,
   zValidator("json", updateDestinationSchema),
   async (c) => {
     const destinationId = c.req.param("id");
     const validatedData = c.req.valid("json");
-    const destination = updateDestinationByIdService(
+    const destination = await updateDestinationByIdService(
       destinationId,
       validatedData
     );
@@ -74,7 +79,20 @@ export const updateDestinationByIdHandler = factory.createHandlers(
 );
 
 export const deleteDestinationByIdHandler = factory.createHandlers(
+  isAuthorizedOrThrow,
   isDestinationExistOrThrow,
   isOwnerOrThrow,
-  async (c) => {}
+  async (c) => {
+    const destinationId = c.req.param("id");
+    await deleteDestinationByIdService(destinationId);
+    return c.json(
+      {
+        success: true,
+        data: {
+          message: "destination deleted",
+        },
+      },
+      200
+    );
+  }
 );

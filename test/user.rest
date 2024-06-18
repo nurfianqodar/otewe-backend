@@ -9,8 +9,8 @@ POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-    "username": "qodar",
-    "email": "nurfian@gmail.com",
+    "username": "qodir",
+    "email": "nurfianqodir@gmail.com",
     "firstName": "Nurfian",
     "password": "secretpassword"
 }
@@ -21,8 +21,8 @@ POST http://localhost:3000/auth
 Content-Type: application/json
 
 {
-    "username": "fuyun",
-    "password": "secretbang"
+    "username": "qodir",
+    "password": "secretpassword"
 }
 
 
