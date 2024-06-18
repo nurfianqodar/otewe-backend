@@ -22,20 +22,16 @@ model User {
 }
 
 model Destination {
-  id String @id @db.VarChar(10)
-
-  name        String  @db.VarChar(255)
-  description String? @db.Text
-
-  userId String @db.VarChar(10)
-
+  id          String   @id @default(uuid()) @db.VarChar(36)
+  name        String   @db.VarChar(255)
+  description String?  @db.Text
+  userId      String   @db.VarChar(10)
   province    String?  @db.VarChar(64)
   district    String?  @db.VarChar(64)
   subdistrict String?  @db.VarChar(64)
   village     String?  @db.VarChar(64)
-  address     String   @db.Text
+  address     String?  @db.Text
   longitude   Decimal?
   latitude    Decimal?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
