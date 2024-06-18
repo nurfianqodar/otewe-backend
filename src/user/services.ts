@@ -2,10 +2,9 @@ import database from "../common/database";
 import * as bcrypt from "bcrypt";
 import {
   CreateUserType,
-  UpdateEmailUserType,
   UpdatePasswordUserType,
   UpdateUserType,
-  UpdateUsernameUserType,
+  UpdateUniqueUserType,
 } from "./validation";
 import { HTTPException } from "hono/http-exception";
 
@@ -59,14 +58,45 @@ export const deleteMeService = async (idMe: string) => {
   await database.user.delete({ where: { id: idMe } });
 };
 
-export const updateMeService = async (validatedData: UpdateUserType) => {};
+export const updateMeService = async (
+  idMe: string,
+  validatedData: UpdateUserType
+) => {
+  const updatedUser = await database.user.update({
+    where: { id: idMe },
+    data: validatedData,
+    select: {
+      username: true,
+      firstName: true,
+      lastName: true,
+    },
+  });
+  return updatedUser;
+};
 
-export const updatePasswordMe = async (
+export const updatePasswordMeService = async (
+  idMe: string,
   validatedData: UpdatePasswordUserType
-) => {};
+) => {
+  validatedData.password = await bcrypt.hash(validatedData.password, 10);
+  await database.user.update({
+    where: { id: idMe },
+    data: { password: validatedData.password },
+  });
+};
 
-export const updateEmailMe = async (validatedData: UpdateEmailUserType) => {};
+export const updateUniqueMeService = async (
+  idMe: string,
+  validatedData: UpdateUniqueUserType
+) => {
+  const user = await database.user.update({
+    where: { id: idMe },
+    data: validatedData,
+    select: {
+      username: true,
+      email: true,
+    },
+  });
 
-export const updateUsernameMe = async (
-  validatedData: UpdateUsernameUserType
-) => {};
+  return user;
+};

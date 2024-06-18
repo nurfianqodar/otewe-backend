@@ -1,14 +1,22 @@
 import { zValidator } from "@hono/zod-validator";
 import { createFactory } from "hono/factory";
-import { createUserSchema } from "./validation";
+import {
+  createUserSchema,
+  updateUserPasswordSchema,
+  updateUserSchema,
+  updateUserUniqueSchema,
+} from "./validation";
 import {
   createUserService,
   deleteMeService,
   getUserByIdService,
   getUserMeService,
   listUserService,
+  updateMeService,
+  updatePasswordMeService,
+  updateUniqueMeService,
 } from "./services";
-import { isUniqueOrThrow } from "./middleware";
+import { isUniqueOrThrow, isUserDataUniqueOrThrow } from "./middleware";
 import { isAuthorizedOrThrow, isUnauthorizedOrThrow } from "../auth/middleware";
 import { deleteCookie, getCookie } from "hono/cookie";
 import { verify } from "hono/jwt";
@@ -74,6 +82,60 @@ export const deleteMeHandler = factory.createHandlers(
       success: true,
       data: {
         message: "user deleted",
+      },
+    });
+  }
+);
+
+export const updateMeHandler = factory.createHandlers(
+  isAuthorizedOrThrow,
+  zValidator("json", updateUserSchema),
+  async (c) => {
+    const token = getCookie(c, "token")!;
+    const { id } = await verify(token, process.env.APP_SECRET!);
+    const updatedData = c.req.valid("json");
+    const user = await updateMeService(id as string, updatedData);
+    c.status(200);
+    return c.json({
+      success: true,
+      data: { user },
+    });
+  }
+);
+
+export const updateUniqueMeHandler = factory.createHandlers(
+  isAuthorizedOrThrow,
+  isUserDataUniqueOrThrow,
+  zValidator("json", updateUserUniqueSchema),
+  async (c) => {
+    const token = getCookie(c, "token")!;
+    const { id } = await verify(token, process.env.APP_SECRET!);
+    const updatedData = c.req.valid("json");
+    const user = await updateUniqueMeService(id as string, updatedData);
+
+    c.status(201);
+    return c.json({
+      success: true,
+      data: {
+        user,
+      },
+    });
+  }
+);
+
+export const updatePasswordMeHandler = factory.createHandlers(
+  isAuthorizedOrThrow,
+  zValidator("json", updateUserPasswordSchema),
+  async (c) => {
+    const token = getCookie(c, "token")!;
+    const { id } = await verify(token, process.env.APP_SECRET!);
+    const updatedData = c.req.valid("json");
+    updatePasswordMeService(id as string, updatedData);
+    c.status(201);
+    return c.json({
+      success: true,
+      data: {
+        message: "password changed",
       },
     });
   }

@@ -26,13 +26,8 @@ export const updateUserPasswordSchema = z.object({
 export type UpdatePasswordUserType = z.infer<typeof updateUserPasswordSchema>;
 
 // Update Username
-export const updateUserUsernameSchema = z.object({
-  username: z.string().min(3).max(32),
+export const updateUserUniqueSchema = z.object({
+  username: z.string().min(3).max(32).optional(),
+  email: z.string().email().max(32).optional(),
 });
-export type UpdateUsernameUserType = z.infer<typeof updateUserUsernameSchema>;
-
-// Update email
-export const updateUserEmailSchema = z.object({
-  email: z.string().email().max(32),
-});
-export type UpdateEmailUserType = z.infer<typeof updateUserUsernameSchema>;
+export type UpdateUniqueUserType = z.infer<typeof updateUserUniqueSchema>;

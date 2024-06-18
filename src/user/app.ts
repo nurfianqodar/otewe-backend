@@ -5,6 +5,9 @@ import {
   getByIdHandler,
   getMeHandler,
   getUserListHandler,
+  updateMeHandler,
+  updatePasswordMeHandler,
+  updateUniqueMeHandler,
 } from "./handlers";
 
 const userApp = new Hono();
@@ -14,8 +17,9 @@ userApp.post("/", ...createUserHandler);
 userApp.get("/profile/:id", ...getByIdHandler);
 
 userApp.get("/me", ...getMeHandler);
-userApp.patch("/me", async (c) => {});
+userApp.patch("/me", ...updateMeHandler);
 userApp.delete("/me", ...deleteMeHandler);
-userApp.patch("/me/update-password", async (c) => {});
+userApp.patch("/me/update-password", ...updatePasswordMeHandler);
+userApp.patch("/me/update-unique", ...updateUniqueMeHandler);
 
 export default userApp;

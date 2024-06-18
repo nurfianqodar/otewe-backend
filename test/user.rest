@@ -21,8 +21,8 @@ POST http://localhost:3000/auth
 Content-Type: application/json
 
 {
-    "username": "qodar",
-    "password": "secretpassword"
+    "username": "fuyun",
+    "password": "secretbang"
 }
 
 
@@ -40,3 +40,32 @@ GET  http://localhost:3000/users/me
 
 ### delete me
 DELETE  http://localhost:3000/users/me
+
+
+### Update me
+PATCH  http://localhost:3000/users/me
+Content-Type: application/json
+
+{
+    "firstName": "Fuyun",
+    "lastName": "Qodar"
+}
+
+
+###
+PATCH  http://localhost:3000/users/me/update-unique
+Content-Type: application/json
+
+{
+    "email": "fuyun@gmail.com",
+    "username": "fuyun"
+}
+
+
+###
+PATCH  http://localhost:3000/users/me/update-password
+Content-Type: application/json
+
+{
+    "password" : "secretbang"
+}

@@ -37,3 +37,28 @@ export const isExistOrThrow = createMiddleware(async (c, next) => {
 
   await next();
 });
+
+export const isUserDataUniqueOrThrow = createMiddleware(async (c, next) => {
+  const data = await c.req.json<{ username?: string; email?: string }>();
+  if (data.username) {
+    const countUser = await database.user.count({
+      where: { username: data.username },
+    });
+
+    if (countUser !== 0) {
+      throw new HTTPException(400, { message: "username already exist" });
+    }
+  }
+
+  if (data.email) {
+    const countUser = await database.user.count({
+      where: { email: data.email },
+    });
+
+    if (countUser !== 0) {
+      throw new HTTPException(400, { message: "email already exist" });
+    }
+  }
+
+  await next();
+});
